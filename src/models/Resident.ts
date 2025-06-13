@@ -4,7 +4,7 @@ import { IResidnetInterface } from "../interfaces/residentInterface";
 
 const residentSchema = new mongoose.Schema<IResidnetInterface>({
     unitNumber: {
-        type: Number,
+        type: String,
         required: [true, 'please enter valid unit number']
     },
     firstName: {
@@ -22,6 +22,10 @@ const residentSchema = new mongoose.Schema<IResidnetInterface>({
     contactNumber: {
         type: String,
         validate: [validator.isMobilePhone, "please provide a valid phone number"],
+    },
+    parkingSpot: {
+        type: String,
+        default: 'N/A'
     }
 }
 )

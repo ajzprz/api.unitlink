@@ -6,6 +6,7 @@ import morgan from "morgan";
 import dotenv from 'dotenv';
 import cors from "cors";
 import globalErrorHandler from "./controllers/errorController";
+import unitRouter from "./routes/unitRoutes";
 dotenv.config();
 
 const app: Express = express();
@@ -38,6 +39,7 @@ app.get("/", (req, res) => {
 
 app.use('/api/v1/auth/', userRoutes);
 app.use('/api/v1/residents/', residentRoutes)
+app.use('/api/v1/units/', unitRouter)
 
 //Global Error Handler
 app.use(globalErrorHandler);
