@@ -1,7 +1,6 @@
-import { ObjectId } from "mongoose";
+import { Document } from "mongoose";
 
 export interface UnitInterface extends Document {
-    _id?: ObjectId; // optional if not yet saved
     unitNumber: string;
     floor?: number;
     buildingName?: string;
@@ -15,6 +14,7 @@ export interface UnitInterface extends Document {
 
     hasParking?: boolean;
     parkingSpot?: string;
+    lockerNumber?: string;
 
     maintenanceNotes?: string;
     lastInspection?: Date;

@@ -5,6 +5,6 @@ const unitRouter = express.Router();
 unitRouter.route('/').get(unitController.getUnits);
 unitRouter.route('/getUnitNumbers').get(unitController.getUnitNumbers);
 unitRouter.route('/createUnit').post(unitController.createUnit)
-unitRouter.route('/:id').delete(unitController.deleteUnit);
+unitRouter.route('/:id').get(unitController.getUnit).delete(unitController.deleteUnit);
 
 export default unitRouter;

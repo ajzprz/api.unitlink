@@ -18,6 +18,7 @@ const unitSchema = new mongoose.Schema<UnitInterface>({
     // Parking & maintenance
     hasParking: Boolean,
     parkingSpot: String,
+    lockerNumber: String,
     maintenanceNotes: String,
     lastInspection: Date,
     maintenanceStatus: String, // "Pending", "Completed", etc.

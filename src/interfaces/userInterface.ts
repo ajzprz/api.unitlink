@@ -4,6 +4,8 @@ export enum UserRole {
     User = "user",
     Admin = "admin",
     Concierge = "concierge",
+    Superintendent = "superintendent",
+    Cleaner = "cleaner",
 }
 
 export interface IUserDocument extends Document {
@@ -20,6 +22,7 @@ export interface IUserDocument extends Document {
     passwordResetOTP?: string;
     passwordResetOTPExpires?: Date;
     googleId?: string;
+    needsPasswordChange?: boolean;
     correctPassword(
         candidatePassword: string,
         userPassword: string

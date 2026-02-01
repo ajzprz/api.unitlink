@@ -13,8 +13,23 @@ class ResidentController {
         });
     })
 
+    getResident = catchAsync(async (req: CustomRequest, res: Response, next: NextFunction) => {
+        const { id } = req.params;
+        const resident = await Resident.findById(id);
+
+        if (!resident) {
+            return next(new AppError("Resident not found", 404));
+        }
+
+        res.status(200).json({
+            status: "success",
+            user: resident,
+        });
+    })
+
+
     addResident = catchAsync(async (req: CustomRequest, res: Response, next: NextFunction) => {
-        const { email, unitNumber, firstName, lastName, contactNumber, parkingSpot } = req.body;
+        const { email, unitNumber, firstName, lastName, contactNumber, parkingSpot, password } = req.body;
 
         // Check if resident already exists
         const existingResident = await Resident.findOne({ email });
@@ -29,7 +44,9 @@ class ResidentController {
             lastName,
             contactNumber,
             email,
-            parkingSpot
+            parkingSpot,
+            password,
+            role: 'resident'
         });
 
         // Respond with success
@@ -39,28 +56,29 @@ class ResidentController {
         });
     });
 
+
     editResident = catchAsync(async (req: CustomRequest, res: Response, next: NextFunction) => {
         const { id } = req.params;
         const { email, unitNumber, firstName, lastName, contactNumber, parkingSpot } = req.body;
 
         // Check if resident exists
-        const existingResident = await Resident.findOne({ id });
+        const existingResident = await Resident.findById(id);
         if (!existingResident) {
-            return next(new AppError("Resident doesnot exists!", 400));
+            return next(new AppError("Resident does not exist!", 404));
         }
 
-        const editResident = await Resident.findByIdAndDelete((id), {
+        const updatedResident = await Resident.findByIdAndUpdate(id, {
             unitNumber,
             firstName,
             lastName,
             contactNumber,
             email,
             parkingSpot
-        });
+        }, { new: true, runValidators: true });
 
         res.status(200).json({
             status: "edit resident success",
-            user: editResident,
+            user: updatedResident,
         });
     });
 

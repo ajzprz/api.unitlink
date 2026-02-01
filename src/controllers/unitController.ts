@@ -23,6 +23,20 @@ class UnitController {
     }
     )
 
+    getUnit = catchAsync(async (req: CustomRequest, res: Response, next: NextFunction) => {
+        const { id } = req.params;
+        const unit = await Unit.findById(id);
+
+        if (!unit) {
+            return next(new AppError("Unit not found", 404));
+        }
+
+        res.status(200).json({
+            status: "success",
+            data: unit,
+        });
+    })
+
     createUnit = catchAsync(async (req: CustomRequest, res: Response, next: NextFunction) => {
         const { unitNumber } = req.body;
         const existingUnit = await Unit.findOne({ unitNumber });

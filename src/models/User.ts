@@ -1,11 +1,11 @@
 import mongoose, { Query, Document } from "mongoose";
 import validator from "validator";
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 import { IUserDocument, UserRole } from "../interfaces/userInterface.js";
 import mongooseAggregatePaginate from "mongoose-aggregate-paginate-v2";
 
 //user schema
-const userSchema = new mongoose.Schema<IUserDocument, UserRole>(
+const userSchema = new mongoose.Schema<IUserDocument>(
   {
     name: {
       type: String,
@@ -68,6 +68,10 @@ const userSchema = new mongoose.Schema<IUserDocument, UserRole>(
       type: String,
       unique: true,
       sparse: true, // This allows the field to be unique but not required
+    },
+    needsPasswordChange: {
+      type: Boolean,
+      default: false,
     },
   },
   { timestamps: true }
