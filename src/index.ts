@@ -4,12 +4,14 @@ import residentRoutes from "./routes/residentRoutes";
 import packageRoutes from "./routes/packageRoutes";
 import communityRoutes from "./routes/communityRoutes";
 import staffRoutes from "./routes/staffRoutes";
+import reportRoutes from "./routes/reportRoutes";
 import connectDB from "./config/db";
 import morgan from "morgan";
 import dotenv from 'dotenv';
 import cors from "cors";
 import globalErrorHandler from "./controllers/errorController";
 import unitRouter from "./routes/unitRoutes";
+import notificationRoutes from "./routes/notificationRoutes";
 dotenv.config();
 
 const app: Express = express();
@@ -46,6 +48,8 @@ app.use('/api/v1/units', unitRouter)
 app.use('/api/v1/packages', packageRoutes)
 app.use('/api/v1/community', communityRoutes)
 app.use('/api/v1/staff', staffRoutes)
+app.use('/api/v1/reports', reportRoutes)
+app.use('/api/v1/notifications', notificationRoutes)
 
 //Global Error Handler
 app.use(globalErrorHandler);

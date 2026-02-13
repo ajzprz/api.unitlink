@@ -6,7 +6,20 @@ import AppError from "../utils/appError"
 
 class UnitController {
     getUnits = catchAsync(async (req: CustomRequest, res: Response, next: NextFunction) => {
-        const unit = await Unit.find().sort({ unitNumber: 1 });;
+        // Use aggregation to lookup residents by unitNumber
+        // Since both Unit and Resident have unitNumber as string, we can verify this
+        const unit = await Unit.aggregate([
+            {
+                $lookup: {
+                    from: "residents", // collection name for Resident model
+                    localField: "unitNumber",
+                    foreignField: "unitNumber",
+                    as: "residents"
+                }
+            },
+            { $sort: { unitNumber: 1 } }
+        ]);
+
         res.status(200).json({
             status: "success",
             data: unit,

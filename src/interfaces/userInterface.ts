@@ -6,6 +6,7 @@ export enum UserRole {
     Concierge = "concierge",
     Superintendent = "superintendent",
     Cleaner = "cleaner",
+    Resident = "resident",
 }
 
 export interface IUserDocument extends Document {

@@ -1,9 +1,19 @@
 import { Request, Response } from 'express';
 import Package from "../models/Packages";
+import { notifyUser } from './notificationController';
+import { CustomRequest } from '../interfaces/customRequest';
+import { UserRole } from '../interfaces/userInterface';
 
-export const getPackages = async (req: Request, res: Response): Promise<void> => {
+export const getPackages = async (req: any, res: Response): Promise<void> => {
     try {
-        const packages = await Package.find().sort({ createdAt: -1 });
+        let query = {};
+
+        // If the user is a resident, they can only see their own packages
+        if (req.user?.role === UserRole.Resident) {
+            query = { userId: req.user._id };
+        }
+
+        const packages = await Package.find(query).sort({ createdAt: -1 });
         res.status(200).json({
             status: "success",
             data: packages
@@ -14,7 +24,7 @@ export const getPackages = async (req: Request, res: Response): Promise<void> =>
     }
 };
 
-export const getPackage = async (req: Request, res: Response): Promise<void> => {
+export const getPackage = async (req: any, res: Response): Promise<void> => {
     try {
         const packageId = req.params.id;
         const pkg = await Package.findById(packageId);
@@ -32,9 +42,21 @@ export const getPackage = async (req: Request, res: Response): Promise<void> => 
     }
 };
 
-export const createPackage = async (req: Request, res: Response): Promise<void> => {
+export const createPackage = async (req: any, res: Response): Promise<void> => {
     try {
         const newPackage = await Package.create(req.body);
+
+        // Notify resident
+        if (req.body.userId) {
+            notifyUser(
+                req.body.userId,
+                'package',
+                'Package Arrived',
+                `A new package from ${req.body.carrier} has arrived. Type: ${req.body.packageType}`,
+                newPackage._id
+            );
+        }
+
         res.status(201).json({
             status: "success",
             data: newPackage
@@ -45,7 +67,7 @@ export const createPackage = async (req: Request, res: Response): Promise<void> 
     }
 };
 
-export const updatePackage = async (req: Request, res: Response): Promise<void> => {
+export const updatePackage = async (req: any, res: Response): Promise<void> => {
     try {
         const packageId = req.params.id;
         const updatedPackage = await Package.findByIdAndUpdate(packageId, req.body, {
@@ -66,7 +88,7 @@ export const updatePackage = async (req: Request, res: Response): Promise<void> 
     }
 };
 
-export const deletePackage = async (req: Request, res: Response): Promise<void> => {
+export const deletePackage = async (req: any, res: Response): Promise<void> => {
     try {
         const packageId = req.params.id;
         const deletedPackage = await Package.findByIdAndDelete(packageId);
@@ -84,7 +106,7 @@ export const deletePackage = async (req: Request, res: Response): Promise<void> 
     }
 };
 
-export const collectPackage = async (req: Request, res: Response): Promise<void> => {
+export const collectPackage = async (req: any, res: Response): Promise<void> => {
     try {
         const packageId = req.params.id;
         const { pickedUpBy } = req.body;

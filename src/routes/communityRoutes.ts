@@ -14,6 +14,13 @@ router.post('/announcements', authController.restrictTo(['admin']), communityCon
 router.get('/amenities', communityController.getAllAmenities);
 router.post('/amenities/book', communityController.bookAmenity);
 router.get('/amenities/my-bookings', communityController.getMyBookings);
+router.get('/amenities/public/bookings', communityController.getPublicBookings);
+router.get('/amenities/:amenityId/bookings', communityController.getBookingsByAmenity);
+router.patch('/amenities/bookings/:bookingId/cancel', communityController.cancelBooking);
+
+// Admin only routes for amenities
+router.get('/amenities/bookings', authController.restrictTo(['admin', 'staff']), communityController.getAllBookings);
+router.patch('/amenities/bookings/:bookingId', authController.restrictTo(['admin', 'staff']), communityController.updateBookingStatus);
 
 // Postings
 router.get('/postings', communityController.getAllPostings);

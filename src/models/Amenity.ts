@@ -29,7 +29,7 @@ const amenityBookingSchema = new mongoose.Schema({
     },
     residentId: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Resident',
+        ref: 'User', // Changed from Resident to User to support both Residents and Staff/Admin
         required: true
     },
     unitNumber: String,
@@ -39,6 +39,18 @@ const amenityBookingSchema = new mongoose.Schema({
     },
     endTime: {
         type: Date,
+        required: true
+    },
+    numPeople: {
+        type: Number,
+        required: true
+    },
+    alcoholIncluded: {
+        type: Boolean,
+        default: false
+    },
+    termsAccepted: {
+        type: Boolean,
         required: true
     },
     status: {
